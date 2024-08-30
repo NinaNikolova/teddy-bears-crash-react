@@ -182,7 +182,18 @@ const App = () => {
             setCurrentColorArrangement([...currentColorArrangement])
         }
     }
-
+    const touchStart = (e) => {
+        setSquareBeingDragged(e.targetTouches[0].target);
+    };
+    
+    const touchMove = (e) => {
+        e.preventDefault(); // Prevent scrolling when moving touch
+        setSquareBeingReplaced(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY));
+    };
+    
+    const touchEnd = () => {
+        dragEnd();
+    };
     const createBoard = () => {
         const randomColorArrangement = [];
         for (let i = 0; i < width * width; i++) {
@@ -204,7 +215,7 @@ const App = () => {
             checkForRowOfThree()
             moveIntoSquareBelow()
             setCurrentColorArrangement([...currentColorArrangement])
-        }, 100)
+        }, 300)
         return () => clearInterval(timer)
     }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, currentColorArrangement])
 
@@ -232,6 +243,9 @@ const App = () => {
                         onDragLeave={(e) => e.preventDefault()}
                         onDrop={dragDrop}
                         onDragEnd={dragEnd}
+                        onTouchStart={touchStart}
+                        onTouchMove={touchMove}
+                        onTouchEnd={touchEnd}
                     />
                 ))}
             </div>
