@@ -53,6 +53,7 @@ const App = () => {
     
                 if (newScore >= 200) {
                     setWin(true); // Trigger win animation
+                    console.log(thumbsUp, win)
                 }
     
                 return newScore;
