@@ -25,7 +25,7 @@ import princess6 from './images/princess6.png';
 import blank from './images/blank.png';
 
 import thumbsUpImage from './images/thumbs-up.png';
-import winSound from './images/yeah.wav';
+import winSound from './images/yeah.mp3';
 
 const width = 8;
 
@@ -50,6 +50,7 @@ const App = () => {
 
         const handleUserInteraction = () => {
             const audio = new Audio(winSound);
+            audio.volume = 0.5; 
             audio.play().catch((error) => {
                 console.log('Playback prevented: ', error);
             });
