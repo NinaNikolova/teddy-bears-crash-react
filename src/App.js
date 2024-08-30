@@ -24,6 +24,9 @@ import princess6 from './images/princess6.png';
 
 import blank from './images/blank.png';
 
+import thumbsUpImage from './images/thumbs-up.png';
+import winSound from './images/yeah.wav';
+
 const width = 8;
 
 const candyColors = [blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy];
@@ -45,11 +48,18 @@ const App = () => {
         : gameType === 'princess' ? princessColors
         : candyColors;
 
+        const handleUserInteraction = () => {
+            const audio = new Audio(winSound);
+            audio.play().catch((error) => {
+                console.log('Playback prevented: ', error);
+            });
+        };
         const handleScoreIncrease = (points) => {
             setScoreDisplay((score) => {
                 const newScore = score + points;
-                setThumbsUp(true); // Trigger thumbs-up animation
-                setTimeout(() => setThumbsUp(false), 500); // Reset thumbs-up animation after it ends
+                setThumbsUp(true);
+                handleUserInteraction(); // Trigger thumbs-up animation
+                setTimeout(() => setThumbsUp(false), 600); // Reset thumbs-up animation after it ends
     
                 if (newScore >= 200) {
                     setWin(true); // Trigger win animation
@@ -228,6 +238,22 @@ const App = () => {
                     <option value="bear">Bear</option>
                     <option value="princess">Princess</option>
                 </select>
+                {thumbsUp && (
+                <img
+                    src={thumbsUpImage}
+                    alt="Thumbs Up"
+                    className="thumbs-up-animation"
+                    style={{
+                        position: 'absolute',
+                        top: '2%', 
+                        width: '120px', // Adjust size as needed
+                        height: 'auto', // Maintain aspect ratio
+                        zIndex: 10, // Ensure it's above other content
+                        animation: 'thumbsUpImage 0.5s ease-in-out forwards'
+                    }}
+                
+                />
+            )}
             </div>
             <div className="game">
                 {currentColorArrangement.map((color, index) => (
@@ -249,6 +275,7 @@ const App = () => {
                     />
                 ))}
             </div>
+           
             <ScoreBoard score={scoreDisplay}/>
         </div>
     )
