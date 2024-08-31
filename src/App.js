@@ -26,7 +26,7 @@ const App = () => {
     const [gameType, setGameType] = useState('candy');
     const [thumbsUp, setThumbsUp] = useState(false); // State for thumbs-up animation
     const [win, setWin] = useState(false); // State for win animation
-
+    const [gameStarted, setGameStarted] = useState(false); // New state
 
     const colors = gameType === 'candy' ? candyColors
         : gameType === 'bear' ? bearColors
@@ -41,14 +41,25 @@ const App = () => {
             console.log('Playback prevented: ', error);
         });
     };
+
+  // Function to reset the game
+  const resetGame = () => {
+    setScoreDisplay(0);
+    createBoard(); // Recreate the board
+    setWin(false); // Reset win state
+    setGameStarted(true); 
+};
+
     const handleUserWin = () => {
         const audio = new Audio(winSound1);
         audio.volume = 0.3;
         audio.play().catch((error) => {
             console.log('Playback prevented: ', error);
         });
+        
     };
     const handleScoreIncrease = (points) => {
+        if(gameStarted===true){
         setScoreDisplay((score) => {
             const newScore = score + points;
             setThumbsUp(true);
@@ -70,6 +81,7 @@ const App = () => {
 
             return newScore;
         });
+    }
     }
     
 
@@ -215,6 +227,7 @@ const App = () => {
 
     useEffect(() => {
         setScoreDisplay(0);
+        setGameStarted(false)
         createBoard()
     }, [gameType])
 
@@ -232,13 +245,16 @@ const App = () => {
 
     return (
         <div className="app">
+            <div  className="logo">
+   &lt;Code4Fun /&gt;
+  </div>
             <div className="controls">
-                <label htmlFor="gameType">Choose Game: </label>
+                <label htmlFor="gameType"></label>
                 <select id="gameType" value={gameType} onChange={(e) => setGameType(e.target.value)}>
-                    <option value="candy">Candy</option>
-                    <option value="bear">Bear</option>
-                    <option value="princess">Princess</option>
-                    <option value="pony">Pony</option>
+                    <option value="candy">🍬 Candy</option>
+                    <option value="bear">🧸 Bear</option>
+                    <option value="princess">👸 Princess</option>
+                    <option value="pony">🦄 Pony</option>
                 </select>
                 {thumbsUp && (
                     <img
@@ -257,6 +273,9 @@ const App = () => {
                     />
                 )}
             </div>
+            {!gameStarted && (
+                    <button className="btn" onClick={resetGame}>Start Game</button> // Start button
+                )}
             <div className="game">
                 {currentColorArrangement.map((color, index) => (
                     <img
