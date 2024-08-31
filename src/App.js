@@ -1,43 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import ScoreBoard from './components/ScoreBoard';
-import blueBear from './images/blue.png';
-import greenBear from './images/green.png';
-import orangeBear from './images/orange.png';
-import purpleBear from './images/purple.png';
-import redBear from './images/red.png';
-import yellowBear from './images/yellow.png';
 
-import blueCandy from './images/blue-candy.png';
-import greenCandy from './images/green-candy.png';
-import orangeCandy from './images/orange-candy.png';
-import purpleCandy from './images/purple-candy.png';
-import redCandy from './images/red-candy.png';
-import yellowCandy from './images/yellow-candy.png';
-
-import princess1 from './images/princess1.png';
-import princess2 from './images/princess2.png';
-import princess3 from './images/princess3.png';
-import princess4 from './images/princess4.png';
-import princess5 from './images/princess5.png';
-import princess6 from './images/princess6.png';
-
-import blank from './images/blank.png';
-
-import thumbsUpImage from './images/thumbs-up.png';
-import winSound from './images/yeah.mp3';
+import {
+    blueBear, greenBear, orangeBear, purpleBear, redBear, yellowBear,
+    blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy,
+    princess1, princess2, princess3, princess4, princess5, princess6,
+    pony1, pony2, pony3, pony4, pony5, pony6,
+    blank, thumbsUpImage, winSound, winSound1
+} from './assets.js';
 
 const width = 8;
 
 const candyColors = [blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy];
 const bearColors = [blueBear, greenBear, orangeBear, purpleBear, redBear, yellowBear];
 const princessColors = [princess1, princess2, princess3, princess4, princess5, princess6];
+const ponyColors = [ pony1, pony2, pony3, pony4, pony5, pony6];
 
 const App = () => {
     const [currentColorArrangement, setCurrentColorArrangement] = useState([]);
     const [squareBeingDragged, setSquareBeingDragged] = useState(null);
     const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
     const [scoreDisplay, setScoreDisplay] = useState(0);
+
     const [gameType, setGameType] = useState('candy');
     const [thumbsUp, setThumbsUp] = useState(false); // State for thumbs-up animation
     const [win, setWin] = useState(false); // State for win animation
@@ -45,32 +30,48 @@ const App = () => {
 
     const colors = gameType === 'candy' ? candyColors
         : gameType === 'bear' ? bearColors
-        : gameType === 'princess' ? princessColors
-        : candyColors;
+            : gameType === 'princess' ? princessColors
+                : gameType === 'pony' ? ponyColors
+                    : candyColors;
 
-        const handleUserInteraction = () => {
-            const audio = new Audio(winSound);
-            audio.volume = 0.5; 
-            audio.play().catch((error) => {
-                console.log('Playback prevented: ', error);
-            });
-        };
-        const handleScoreIncrease = (points) => {
-            setScoreDisplay((score) => {
-                const newScore = score + points;
-                setThumbsUp(true);
-                handleUserInteraction(); // Trigger thumbs-up animation
-                setTimeout(() => setThumbsUp(false), 600); // Reset thumbs-up animation after it ends
-    
-                if (newScore >= 200) {
-                    setWin(true); // Trigger win animation
-                    console.log(thumbsUp, win)
-                }
-    
-                return newScore;
-            });
-        }
+    const handleUserInteraction = () => {
+        const audio = new Audio(winSound);
+        audio.volume = 0.3;
+        audio.play().catch((error) => {
+            console.log('Playback prevented: ', error);
+        });
+    };
+    const handleUserWin = () => {
+        const audio = new Audio(winSound1);
+        audio.volume = 0.3;
+        audio.play().catch((error) => {
+            console.log('Playback prevented: ', error);
+        });
+    };
+    const handleScoreIncrease = (points) => {
+        setScoreDisplay((score) => {
+            const newScore = score + points;
+            setThumbsUp(true);
+            handleUserInteraction(); // Trigger thumbs-up animation
+            setTimeout(() => setThumbsUp(false), 600); // Reset thumbs-up animation after it ends
 
+            if (newScore >= 200) { // Adjust this condition as per your win criteria
+                setWin(true);
+                handleUserWin(); // Play win sound
+
+                // Reset win state and score after 6 seconds
+                setTimeout(() => {
+                    setWin(false);
+                    setScoreDisplay(0);
+                }, 6000);
+
+                return 0; // Reset score immediately
+            }
+
+            return newScore;
+        });
+    }
+    
 
     const checkForColumnOfFour = () => {
         for (let i = 0; i <= 39; i++) {
@@ -80,7 +81,7 @@ const App = () => {
 
             if (columnOfFour.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(4);
-                setScoreDisplay((score) => score + 4);
+           
                 columnOfFour.forEach(square => currentColorArrangement[square] = blank);
                 return true;
             }
@@ -98,7 +99,7 @@ const App = () => {
 
             if (rowOfFour.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(4);
-                setScoreDisplay((score) => score + 4);
+         
                 rowOfFour.forEach(square => currentColorArrangement[square] = blank);
                 return true;
             }
@@ -112,7 +113,6 @@ const App = () => {
             const isBlank = currentColorArrangement[i] === blank;
 
             if (columnOfThree.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
-                setScoreDisplay((score) => score + 3);
                 handleScoreIncrease(3);
                 columnOfThree.forEach(square => currentColorArrangement[square] = blank);
                 return true;
@@ -131,7 +131,6 @@ const App = () => {
 
             if (rowOfThree.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(3);
-                setScoreDisplay((score) => score + 3);
                 rowOfThree.forEach(square => currentColorArrangement[square] = blank);
                 return true;
             }
@@ -196,12 +195,12 @@ const App = () => {
     const touchStart = (e) => {
         setSquareBeingDragged(e.targetTouches[0].target);
     };
-    
+
     const touchMove = (e) => {
         e.preventDefault(); // Prevent scrolling when moving touch
         setSquareBeingReplaced(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY));
     };
-    
+
     const touchEnd = () => {
         dragEnd();
     };
@@ -215,6 +214,7 @@ const App = () => {
     }
 
     useEffect(() => {
+        setScoreDisplay(0);
         createBoard()
     }, [gameType])
 
@@ -228,33 +228,34 @@ const App = () => {
             setCurrentColorArrangement([...currentColorArrangement])
         }, 300)
         return () => clearInterval(timer)
-    }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, currentColorArrangement])
+    }, [currentColorArrangement])
 
     return (
         <div className="app">
             <div className="controls">
-                <label htmlFor="gameType">Choose Game Type: </label>
+                <label htmlFor="gameType">Choose Game: </label>
                 <select id="gameType" value={gameType} onChange={(e) => setGameType(e.target.value)}>
                     <option value="candy">Candy</option>
                     <option value="bear">Bear</option>
                     <option value="princess">Princess</option>
+                    <option value="pony">Pony</option>
                 </select>
                 {thumbsUp && (
-                <img
-                    src={thumbsUpImage}
-                    alt="Thumbs Up"
-                    className="thumbs-up-animation"
-                    style={{
-                        position: 'absolute',
-                        top: '2%', 
-                        width: '120px', // Adjust size as needed
-                        height: 'auto', // Maintain aspect ratio
-                        zIndex: 10, // Ensure it's above other content
-                        animation: 'thumbsUpImage 0.5s ease-in-out forwards'
-                    }}
-                
-                />
-            )}
+                    <img
+                        src={thumbsUpImage}
+                        alt="Thumbs Up"
+                        className="thumbs-up-animation"
+                        style={{
+                            position: 'absolute',
+                            top: '2%',
+                            width: '120px', // Adjust size as needed
+                            height: 'auto', // Maintain aspect ratio
+                            zIndex: 10, // Ensure it's above other content
+                            animation: 'thumbsUpImage 0.5s ease-in-out forwards'
+                        }}
+
+                    />
+                )}
             </div>
             <div className="game">
                 {currentColorArrangement.map((color, index) => (
@@ -276,8 +277,9 @@ const App = () => {
                     />
                 ))}
             </div>
-           
-            <ScoreBoard score={scoreDisplay}/>
+
+            {!win&&<ScoreBoard score={scoreDisplay} />}
+            {win && (<><div className="loader"></div><span className="loader1"></span></>)}
         </div>
     )
 }

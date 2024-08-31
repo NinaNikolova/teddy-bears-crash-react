@@ -8,13 +8,16 @@
 }
 
 .controls {
-  margin-bottom: 20px;
+  margin-block: 40px;
   text-align: center;
+  color: orange;
+  font-size: 20px;
 }
 
 #gameType {
   padding: 8px;
   font-size: 16px;
+  color: orange;
   border-radius: 4px;
   border: 2px solid orange;
   margin-left: 10px;
@@ -51,12 +54,15 @@
 
 
 
-.scoreboard {
-  font-size: 24px;
+.score-board {
+  width: 160px;
+  text-align: center;
+  font-size: 20px;
   font-weight: bold;
   margin: 20px;
-  padding: 10px;
-  background-color: #ffcc00;
+  padding-inline: 20px;
+border:2px solid orange;
+color: orange;
   border-radius: 8px;
   display: inline-block;
   animation: scoreIncrease 0.3s ease-in-out;
@@ -102,10 +108,94 @@
   }
 }
 
-.win {
-  animation: winAnimation 1s ease-in-out;
-  border: 2px solid #00ff00;
-  padding: 10px;
-  font-size: 28px;
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 80px;
+  aspect-ratio: 1;
+  position:relative;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffb940;    
+  box-shadow: 0 0 0 50px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.loader:after {
+  animation: l5 1s infinite;
+  transform: perspective(300px) translateZ(0px)
+}
+@keyframes l5 {
+  to {transform:perspective(300px) translateZ(150px);opacity:0}
+}
+
+/* HTML: <div class="loader"></div> */
+.loader1 {
+  --w:10ch;
   font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  letter-spacing: var(--w);
+  width:var(--w);
+  overflow: hidden;
+  white-space: nowrap;
+  text-shadow: 
+    calc(-1*var(--w)) 0, 
+    calc(-2*var(--w)) 0, 
+    calc(-3*var(--w)) 0, 
+    calc(-4*var(--w)) 0,
+    calc(-5*var(--w)) 0, 
+    calc(-6*var(--w)) 0, 
+    calc(-7*var(--w)) 0, 
+    calc(-8*var(--w)) 0, 
+    calc(-9*var(--w)) 0;
+  animation: l16 2s infinite;
+}
+.loader1:before {
+  content:"WIN!!!";
+}
+@keyframes l16 {
+  20% {text-shadow: 
+    calc(-1*var(--w)) 0, 
+    calc(-2*var(--w)) 0 red, 
+    calc(-3*var(--w)) 0, 
+    calc(-4*var(--w)) 0 #ffa516,
+    calc(-5*var(--w)) 0 #63fff4, 
+    calc(-6*var(--w)) 0, 
+    calc(-7*var(--w)) 0, 
+    calc(-8*var(--w)) 0 green, 
+    calc(-9*var(--w)) 0;}
+  40% {text-shadow: 
+    calc(-1*var(--w)) 0, 
+    calc(-2*var(--w)) 0 red, 
+    calc(-3*var(--w)) 0 #e945e9, 
+    calc(-4*var(--w)) 0,
+    calc(-5*var(--w)) 0 green, 
+    calc(-6*var(--w)) 0 orange, 
+    calc(-7*var(--w)) 0, 
+    calc(-8*var(--w)) 0 green, 
+    calc(-9*var(--w)) 0;}
+  60% {text-shadow: 
+    calc(-1*var(--w)) 0 lightblue, 
+    calc(-2*var(--w)) 0, 
+    calc(-3*var(--w)) 0 #e945e9, 
+    calc(-4*var(--w)) 0,
+    calc(-5*var(--w)) 0 green, 
+    calc(-6*var(--w)) 0, 
+    calc(-7*var(--w)) 0 yellow, 
+    calc(-8*var(--w)) 0 #ffa516, 
+    calc(-9*var(--w)) 0 red;}
+  80% {text-shadow: 
+    calc(-1*var(--w)) 0 lightblue, 
+    calc(-2*var(--w)) 0 yellow, 
+    calc(-3*var(--w)) 0 #63fff4, 
+    calc(-4*var(--w)) 0 #ffa516,
+    calc(-5*var(--w)) 0 red, 
+    calc(-6*var(--w)) 0, 
+    calc(-7*var(--w)) 0 grey, 
+    calc(-8*var(--w)) 0 #63fff4, 
+    calc(-9*var(--w)) 0 ;}
 }
