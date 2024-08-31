@@ -8,7 +8,7 @@
 }
 
 .controls {
-  margin-block: 40px;
+  margin-block: 20px;
   /* text-align: center; */
   color: orange;
   font-size: 20px;
@@ -21,7 +21,7 @@
   border-radius: 4px;
   border: 2px solid orange;
   border: none;
-  margin-left: 10px;
+  margin-block: 40px;
 }
 
 
@@ -32,6 +32,27 @@
   max-width: 100%;
   margin-bottom: 20px;
 }
+.thumbs-up-animation{
+  position: absolute;
+  top: 2%;
+  width: 120px;
+  height: auto;
+  z-index: 10;
+  animation: thumbsUpImage 0.5s ease-in-out forwards;
+}
+
+/* Define the keyframes for the thumbsUpImage animation */
+@keyframes thumbsUpImage {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 
 .game img {
   max-width: 70px;
@@ -72,26 +93,6 @@ color: orange;
   display: inline-block;
   animation: scoreIncrease 0.3s ease-in-out;
   transition: transform 0.3s ease;
-}
-
-/* Thumbs-Up Animation */
-@keyframes thumbsUp {
-  0% {
-      transform: scale(1);
-      color: #333;
-  }
-  50% {
-      transform: scale(1.2);
-      color: #ffcc00;
-  }
-  100% {
-      transform: scale(1);
-      color: #333;
-  }
-}
-
-.scoreboard.thumbs-up {
-  animation: thumbsUp 0.5s ease-in-out;
 }
 
 /* Win Animation */
@@ -232,3 +233,4 @@ color: orange;
   outline: none; /* Remove default focus outline */
   box-shadow: 0px 0px 0px 4px rgba(255, 87, 51, 0.5); /* Custom focus outline with shadow */
 }
+

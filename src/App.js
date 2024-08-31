@@ -7,15 +7,18 @@ import {
     blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy,
     princess1, princess2, princess3, princess4, princess5, princess6,
     pony1, pony2, pony3, pony4, pony5, pony6,
-    blank, thumbsUpImage, winSound, winSound1
+    blank, winSound, winSound1
 } from './assets.js';
+
+import Controls from "./components/Controls.js";
+import Logo from "./components/Logo.js";
 
 const width = 8;
 
 const candyColors = [blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy];
 const bearColors = [blueBear, greenBear, orangeBear, purpleBear, redBear, yellowBear];
 const princessColors = [princess1, princess2, princess3, princess4, princess5, princess6];
-const ponyColors = [ pony1, pony2, pony3, pony4, pony5, pony6];
+const ponyColors = [pony1, pony2, pony3, pony4, pony5, pony6];
 
 const App = () => {
     const [currentColorArrangement, setCurrentColorArrangement] = useState([]);
@@ -42,13 +45,13 @@ const App = () => {
         });
     };
 
-  // Function to reset the game
-  const resetGame = () => {
-    setScoreDisplay(0);
-    createBoard(); // Recreate the board
-    setWin(false); // Reset win state
-    setGameStarted(true); 
-};
+    // Function to reset the game
+    const resetGame = () => {
+        setScoreDisplay(0);
+        createBoard(); // Recreate the board
+        setWin(false); // Reset win state
+        setGameStarted(true);
+    };
 
     const handleUserWin = () => {
         const audio = new Audio(winSound1);
@@ -56,34 +59,34 @@ const App = () => {
         audio.play().catch((error) => {
             console.log('Playback prevented: ', error);
         });
-        
+
     };
     const handleScoreIncrease = (points) => {
-        if(gameStarted===true){
-        setScoreDisplay((score) => {
-            const newScore = score + points;
-            setThumbsUp(true);
-            handleUserInteraction(); // Trigger thumbs-up animation
-            setTimeout(() => setThumbsUp(false), 600); // Reset thumbs-up animation after it ends
+        if (gameStarted === true) {
+            setScoreDisplay((score) => {
+                const newScore = score + points;
+                setThumbsUp(true);
+                handleUserInteraction(); // Trigger thumbs-up animation
+                setTimeout(() => setThumbsUp(false), 600); // Reset thumbs-up animation after it ends
 
-            if (newScore >= 200) { // Adjust this condition as per your win criteria
-                setWin(true);
-                handleUserWin(); // Play win sound
+                if (newScore >= 200) { // Adjust this condition as per your win criteria
+                    setWin(true);
+                    handleUserWin(); // Play win sound
 
-                // Reset win state and score after 6 seconds
-                setTimeout(() => {
-                    setWin(false);
-                    setScoreDisplay(0);
-                }, 6000);
+                    // Reset win state and score after 6 seconds
+                    setTimeout(() => {
+                        setWin(false);
+                        setScoreDisplay(0);
+                    }, 6000);
 
-                return 0; // Reset score immediately
-            }
+                    return 0; // Reset score immediately
+                }
 
-            return newScore;
-        });
+                return newScore;
+            });
+        }
     }
-    }
-    
+
 
     const checkForColumnOfFour = () => {
         for (let i = 0; i <= 39; i++) {
@@ -93,7 +96,7 @@ const App = () => {
 
             if (columnOfFour.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(4);
-           
+
                 columnOfFour.forEach(square => currentColorArrangement[square] = blank);
                 return true;
             }
@@ -106,12 +109,9 @@ const App = () => {
             const decidedColor = currentColorArrangement[i];
             const notValid = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64];
             const isBlank = currentColorArrangement[i] === blank;
-
             if (notValid.includes(i)) continue;
-
             if (rowOfFour.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(4);
-         
                 rowOfFour.forEach(square => currentColorArrangement[square] = blank);
                 return true;
             }
@@ -123,7 +123,6 @@ const App = () => {
             const columnOfThree = [i, i + width, i + width * 2];
             const decidedColor = currentColorArrangement[i];
             const isBlank = currentColorArrangement[i] === blank;
-
             if (columnOfThree.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(3);
                 columnOfThree.forEach(square => currentColorArrangement[square] = blank);
@@ -138,9 +137,7 @@ const App = () => {
             const decidedColor = currentColorArrangement[i];
             const notValid = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64];
             const isBlank = currentColorArrangement[i] === blank;
-
             if (notValid.includes(i)) continue;
-
             if (rowOfThree.every(square => currentColorArrangement[square] === decidedColor && !isBlank)) {
                 handleScoreIncrease(3);
                 rowOfThree.forEach(square => currentColorArrangement[square] = blank);
@@ -153,12 +150,10 @@ const App = () => {
         for (let i = 0; i <= 55; i++) {
             const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
             const isFirstRow = firstRow.includes(i);
-
             if (isFirstRow && currentColorArrangement[i] === blank) {
                 let randomNumber = Math.floor(Math.random() * colors.length);
                 currentColorArrangement[i] = colors[randomNumber];
             }
-
             if ((currentColorArrangement[i + width]) === blank) {
                 currentColorArrangement[i + width] = currentColorArrangement[i];
                 currentColorArrangement[i] = blank;
@@ -245,37 +240,8 @@ const App = () => {
 
     return (
         <div className="app">
-            <div  className="logo">
-   &lt;Code4Fun /&gt;
-  </div>
-            <div className="controls">
-                <label htmlFor="gameType"></label>
-                <select id="gameType" value={gameType} onChange={(e) => setGameType(e.target.value)}>
-                    <option value="candy">🍬 Candy</option>
-                    <option value="bear">🧸 Bear</option>
-                    <option value="princess">👸 Princess</option>
-                    <option value="pony">🦄 Pony</option>
-                </select>
-                {thumbsUp && (
-                    <img
-                        src={thumbsUpImage}
-                        alt="Thumbs Up"
-                        className="thumbs-up-animation"
-                        style={{
-                            position: 'absolute',
-                            top: '2%',
-                            width: '120px', // Adjust size as needed
-                            height: 'auto', // Maintain aspect ratio
-                            zIndex: 10, // Ensure it's above other content
-                            animation: 'thumbsUpImage 0.5s ease-in-out forwards'
-                        }}
-
-                    />
-                )}
-            </div>
-            {!gameStarted && (
-                    <button className="btn" onClick={resetGame}>Start Game</button> // Start button
-                )}
+            <Logo />
+            <Controls gameType={gameType} setGameType={setGameType} resetGame={resetGame} gameStarted={gameStarted} thumbsUp={thumbsUp} />
             <div className="game">
                 {currentColorArrangement.map((color, index) => (
                     <img
@@ -296,8 +262,7 @@ const App = () => {
                     />
                 ))}
             </div>
-
-            {!win&&<ScoreBoard score={scoreDisplay} />}
+            {!win && <ScoreBoard score={scoreDisplay} />}
             {win && (<><div className="loader"></div><span className="loader1"></span></>)}
         </div>
     )
