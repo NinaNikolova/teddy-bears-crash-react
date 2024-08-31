@@ -7,11 +7,11 @@ import {
     blueCandy, greenCandy, orangeCandy, purpleCandy, redCandy, yellowCandy,
     princess1, princess2, princess3, princess4, princess5, princess6,
     pony1, pony2, pony3, pony4, pony5, pony6,
-    blank, winSound, winSound1
-} from './assets.js';
+    blank} from './assets.js';
 
 import Controls from "./components/Controls.js";
 import Logo from "./components/Logo.js";
+import { handleUserInteraction, handleUserWin } from "./utils.js";
 
 const width = 8;
 
@@ -37,14 +37,6 @@ const App = () => {
                 : gameType === 'pony' ? ponyColors
                     : candyColors;
 
-    const handleUserInteraction = () => {
-        const audio = new Audio(winSound);
-        audio.volume = 0.3;
-        audio.play().catch((error) => {
-            console.log('Playback prevented: ', error);
-        });
-    };
-
     // Function to reset the game
     const resetGame = () => {
         setScoreDisplay(0);
@@ -53,14 +45,7 @@ const App = () => {
         setGameStarted(true);
     };
 
-    const handleUserWin = () => {
-        const audio = new Audio(winSound1);
-        audio.volume = 0.3;
-        audio.play().catch((error) => {
-            console.log('Playback prevented: ', error);
-        });
 
-    };
     const handleScoreIncrease = (points) => {
         if (gameStarted === true) {
             setScoreDisplay((score) => {
